@@ -201,7 +201,9 @@ Swig.prototype._w = Swig.prototype._widget = function (layer, subTemplate, attr,
         };
 
         if (layer.bigpipe.isSpiderMode) {
+            // 处于spiderMode，需要同步渲染pagelet
             var syncPagelet = new layer.bigpipe.Pagelet(pageletOptions);
+            // pagelet对应的数据已经准备好了，通过layer.bigpipe.pageletData[attr.id]即可获取
             syncPagelet.start(layer.bigpipe.pageletData[attr.id], true);
             return container ? syncPagelet.html : '<div id="' + attr.id + '"> ' + syncPagelet.html + '</div>';
         }
