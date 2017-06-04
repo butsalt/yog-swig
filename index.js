@@ -140,6 +140,9 @@ SwigWrap.prototype.makeStream = function (view, locals) {
 
 Swig.prototype._idToCompiled = function (layer, id, options) {
     var pathname = layer.resolve(id);
+    // 页面对应的tpl里在release后会加上一个require标签声明require其本身
+    // 从而在render页面时在layer中记录它的dep
+    // widget对应的tpl不会加上这个require，所以要load本身一次从而在layer中记录它的dep
     layer.load(id);
     return this.compileFile(pathname, options);
 };
