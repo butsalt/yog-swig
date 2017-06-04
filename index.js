@@ -140,8 +140,12 @@ SwigWrap.prototype.makeStream = function (view, locals) {
 
 Swig.prototype._idToCompiled = function (layer, id, options) {
     var pathname = layer.resolve(id);
-    // 页面对应的tpl里在release后会加上一个require标签声明require其本身
+    // 页面对应的tpl里在release后会在postProcess阶段加上一个require标签声明require其本身
     // 从而在render页面时在layer中记录它的dep
+    // 祖先页面的dep也通过这种方式被记录下来
+    // 为什么页面不用layer.load(id)，而是使用require标签？
+    // 因为extends时，不仅页面本身的dep应该记录，每个祖先页面的dep也应该记录
+    // 如果仍使用layer.load(id)，不用require，那么祖先页面的dep无法被记录
     // widget对应的tpl不会加上这个require，所以要load本身一次从而在layer中记录它的dep
     layer.load(id);
     return this.compileFile(pathname, options);
